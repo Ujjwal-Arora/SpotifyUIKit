@@ -13,10 +13,50 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-        // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-        // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        let window = UIWindow(windowScene: windowScene)
+        
+    //use app afer 1 hour when token expires and see if video6 time : 5 min is needed here. i already did it that is moved my task func
+        if AuthManager.shared.isSignedIn{
+            
+            Task{
+                do{
+                    try await AuthManager.shared.refreshIfNeeded()
+                }catch{
+                    print(error.localizedDescription)
+                }
+            }
+            
+            window.rootViewController = TabBarViewController()
+        }else{
+            let navVC = UINavigationController(rootViewController: WelcomeViewController())
+            navVC.navigationBar.prefersLargeTitles = true
+            window.rootViewController = navVC
+        }
+        self.window = window
+        window.makeKeyAndVisible()
+        
+//        print(AuthManager.shared.refreshToken)
+ //       print(AuthManager.shared.signInUrl?.absoluteString)
+        
+        
+//        Task{
+//            do{
+//                try await AuthManager.shared.refreshIfNeeded()
+//            }catch{
+//                print(error.localizedDescription)
+//            }
+//        }
+        
+        //testing
+        Task{
+            do{
+      //          try await APICaller.shared.getPlaylist(playlistId: "" )
+            }catch{
+                print(error.localizedDescription)
+            }
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
