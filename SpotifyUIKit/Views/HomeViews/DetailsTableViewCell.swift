@@ -1,5 +1,5 @@
 //
-//  TracksTableViewCell.swift
+//  DetailsTableViewCell.swift
 //  SpotifyUIKit
 //
 //  Created by Ujjwal Arora on 21/10/24.
@@ -8,9 +8,9 @@
 import UIKit
 import SDWebImage
 
-class TracksTableViewCell: UITableViewCell {
+class DetailsTableViewCell: UITableViewCell {
     
-    static let identifier = "TracksTableViewCell"
+    static let identifier = "DetailsTableViewCell"
     
 
     let trackImageView : UIImageView = {
@@ -80,6 +80,19 @@ class TracksTableViewCell: UITableViewCell {
         
     }
     
+    //remove above
+    public func configureDetails(details : DetailsViewModel){
+        trackNameLabel.text = details.title
+        
+        
+        
+ //       guard let urlString = Playlist.album.images.first?.url else { return }
+        trackImageView.sd_setImage(with: URL(string: details.coverImageUrlString))
+
+        
+   //     let artistNames = Playlist.artists.map{$0.name}.joined(separator: ", ")
+        artistNameLabel.text = details.artists
+    }
     
     private func applyConstraints() {
         let trackImageViewConstraints = [
@@ -92,13 +105,11 @@ class TracksTableViewCell: UITableViewCell {
         let trackNameLabelConstraints = [
             trackNameLabel.leadingAnchor.constraint(equalTo: trackImageView.trailingAnchor, constant: 10),
             trackNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-  //          trackNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0)
         ]
         
         let artistNameLabelConstraints = [
             artistNameLabel.leadingAnchor.constraint(equalTo: trackImageView.trailingAnchor, constant: 10),
             artistNameLabel.topAnchor.constraint(equalTo: trackNameLabel.bottomAnchor, constant: 10),
-    //        artistNameLabel.trailingAnchor.constraint(equalTo: trackImageView.trailingAnchor, constant: -20)
             artistNameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
 
         ]

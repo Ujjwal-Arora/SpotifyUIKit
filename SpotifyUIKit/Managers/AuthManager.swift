@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Constants{
     static let clientID = "6ef3f300606c48bd9f1a2004ac063342"
@@ -15,9 +16,9 @@ struct Constants{
     static let tokenApiUrl = "https://accounts.spotify.com/api/token"
     
     static let redirectUri =  "https://open.spotify.com/"
-
+    
     static let scope = "user-read-private%20playlist-modify-public%20playlist-read-private%20playlist-modify-private%20user-follow-read%20user-library-modify%20user-library-read%20user-read-email"
-
+    
 }
 
 final class AuthManager{
@@ -45,13 +46,13 @@ final class AuthManager{
         return UserDefaults.standard.string(forKey: "refreshToken")
     }
     private var tokenExpirationDate : Date?{
-   //     print(UserDefaults.standard.object(forKey: "expirationDate") as?  Date)
+        //     print(UserDefaults.standard.object(forKey: "expirationDate") as?  Date)
         return UserDefaults.standard.object(forKey: "expirationDate") as?  Date
     }
     private var shouldRefreshToken : Bool{
         guard let expirationDate = tokenExpirationDate else { return false }
-            let currentDate = Date()
-            let fiveMinutes : TimeInterval = 300
+        let currentDate = Date()
+        let fiveMinutes : TimeInterval = 300
         if currentDate.addingTimeInterval(fiveMinutes) >= expirationDate {
             return true
         }else{
@@ -93,7 +94,7 @@ final class AuthManager{
     
     public func refreshIfNeeded() async throws{
         guard self.shouldRefreshToken, let refreshToken = self.refreshToken else {return}
-                
+        
         guard let url = URL(string: Constants.tokenApiUrl) else {return}
         
         var urlComponents = URLComponents()
@@ -132,8 +133,15 @@ final class AuthManager{
         }
         
         UserDefaults.standard.setValue(Date().addingTimeInterval(TimeInterval(result.expiresIn)), forKey: "expirationDate")
-//        print(Date())
-//        print("📝",result.expiresIn)
-//        print("🤩",Date().addingTimeInterval(TimeInterval(result.expiresIn)))
+        //        print(Date())
+        //        print("📝",result.expiresIn)
+        //        print("🤩",Date().addingTimeInterval(TimeInterval(result.expiresIn)))
+    }
+    func signOut(){
+        UserDefaults.standard.setValue(nil, forKey: "accessToken")
+        UserDefaults.standard.setValue(nil, forKey: "refreshToken")
+        UserDefaults.standard.setValue(nil, forKey: "expirationDate")
+        
+        
     }
 }

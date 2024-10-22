@@ -19,10 +19,13 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     public var genreplaylist : Playlist?
 
     public var album : ALbumDetailResponse?
+    
+    
+    
 
     private let detailsTableView : UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
-        table.register(TracksTableViewCell.self, forCellReuseIdentifier: TracksTableViewCell.identifier)
+        table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
         return table
     }()
 //    
@@ -66,7 +69,7 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TracksTableViewCell.identifier, for: indexPath) as? TracksTableViewCell else { return UITableViewCell()}
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: DetailsTableViewCell.identifier, for: indexPath) as? DetailsTableViewCell else { return UITableViewCell()}
         
         if let selectedAlbum = album{
             let track = selectedAlbum.tracks.items[indexPath.row]

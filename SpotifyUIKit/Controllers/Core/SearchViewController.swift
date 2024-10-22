@@ -7,7 +7,14 @@
 
 import UIKit
 
-class SearchViewController: UIViewController, UISearchResultsUpdating, UICollectionViewDataSource, UICollectionViewDelegate {
+extension SearchViewController : SearchResultViewControllerDelegate{
+    func didTapRow(controller: UIViewController) {
+        navigationController?.pushViewController(controller, animated: true)
+    }
+}
+
+class SearchViewController: UIViewController, UISearchResultsUpdating, UICollectionViewDataSource, UICollectionViewDelegate  {
+    
     
     private var categories = [Category]()
     
@@ -15,7 +22,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UICollect
         let vc = UISearchController(searchResultsController: SearchResultViewController())
         vc.searchBar.placeholder = "Search songs, artists, albums"
         vc.searchBar.searchBarStyle = .minimal
-        vc.definesPresentationContext = true
+        vc.definesPresentationContext = true //??
         return vc
     }()
     private let searchVCCollectionView : UICollectionView = {
@@ -56,9 +63,12 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UICollect
     func updateSearchResults(for searchController: UISearchController) {
         guard let resultsController = searchController.searchResultsController as? SearchResultViewController, let query = searchController.searchBar.text, !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
        print(query)
+        
+        resultsController.delegate = self
+        
         Task{
-            let aa = try await APICaller.shared.searchResults(query: "")
-            print(aa)
+            let searchResults = try await APICaller.shared.searchResults(query: query)
+            resultsController.update(searchResults: searchResults)
         }
     }
     

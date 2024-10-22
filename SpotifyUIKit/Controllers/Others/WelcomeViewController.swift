@@ -12,19 +12,58 @@ class WelcomeViewController: UIViewController {
     private let signInButton : UIButton = {
        let button = UIButton()
         button.backgroundColor = .white
-        button.setTitle("SignIn with spotify", for: .normal)
-        button.setTitleColor(.systemPink, for: .normal)
-        button.setTitleColor(.black, for: .highlighted)
+        button.setTitle("Sign In with spotify", for: .normal)
+        button.setTitleColor(.black, for: .normal)
         return button
     }()
-    
+    private let backgroundImageView : UIImageView = {
+       let imageView = UIImageView()
+        imageView.contentMode = .scaleToFill
+        imageView.image = UIImage(named: "backgroundImage")
+        return imageView
+    }()
+    private let overlayView: UIView = {
+       let view = UIView()
+        view.backgroundColor = .black
+        view.alpha = 0.75
+        return view
+    }()
+    private let logoImageView : UIImageView = {
+       let imageView = UIImageView()
+        imageView.image = UIImage(named: "logo")
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    private let label : UILabel = {
+       let label = UILabel()
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 32, weight: .semibold)
+        label.text = "Listen to Millions \n of songs on \n the go"
+        return label
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        title = "Welcome"
-        view.backgroundColor = .systemGreen
-        view.addSubview(signInButton)
+        title = "Spotify"
+        view.backgroundColor = .black
         signInButton.addTarget(self, action: #selector(didTapSignIn), for: .touchUpInside)
+        
+        view.addSubview(backgroundImageView)
+        backgroundImageView.frame = view.bounds
+        view.addSubview(overlayView)
+        overlayView.frame = view.bounds
+
+        view.addSubview(signInButton)
+        
+        view.addSubview(logoImageView)
+        view.addSubview(label)
+
+
+        logoImageView.frame = CGRect(x: view.width/2 - 60, y: view.height/2 - 150, width: 120, height: 120)
+        label.frame = CGRect(x: 30, y: logoImageView.bottom + 30, width: view.width - 60, height: 150)
+        
+
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

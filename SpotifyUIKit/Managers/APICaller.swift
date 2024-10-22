@@ -167,7 +167,7 @@ final class APICaller{
         
         let (data,_) = try await URLSession.shared.data(for: request)
         //          print(String(data: data, encoding: .utf8))
- //         print("🥎",resp)
+        //         print("🥎",resp)
         
         
         let decoder = JSONDecoder()
@@ -190,19 +190,19 @@ final class APICaller{
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         let (data,_) = try await URLSession.shared.data(for: request)
-    //    print(String(data: data, encoding: .utf8))
+        //    print(String(data: data, encoding: .utf8))
         //  print("🏀",resp)
         
         
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let response = try decoder.decode(CategoriesResponse.self, from: data)
-//       print("🏀",response)
+        //       print("🏀",response)
         return response
     }
-//    curl --request GET \
-//      --url https://api.spotify.com/v1/browse/categories/0JQ5DAqbMKFKSopHMaeIeI/playlists \
-//      --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
+    //    curl --request GET \
+    //      --url https://api.spotify.com/v1/browse/categories/0JQ5DAqbMKFKSopHMaeIeI/playlists \
+    //      --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
     
     public func getCategoryPlaylist(playlistId : String) async throws -> FeaturedPlaylistResponse {
         
@@ -214,37 +214,56 @@ final class APICaller{
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
         let (data,resp) = try await URLSession.shared.data(for: request)
-      //  print(String(data: data, encoding: .utf8))
+        //  print(String(data: data, encoding: .utf8))
         //  print("🏓",resp)
         
         
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         let response = try decoder.decode(FeaturedPlaylistResponse.self, from: data)
- //       print("🏓",response)
+        //       print("🏓",response)
         return response
     }
-//    curl --request GET \
-//      --url 'https://api.spotify.com/v1/search?q=raftaar&type=album%2Cplaylist&limit=5' \
-//      --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
-    public func searchResults(query : String) async throws -> SearchResponse {
+    //    curl --request GET \
+    //      --url 'https://api.spotify.com/v1/search?q=raftaar&type=album%2Cplaylist&limit=5' \
+    //      --header 'Authorization: Bearer 1POdFZRZbvb...qqillRxMr2z'
+    var lastQuery = ""
+    public func searchResults(query : String) async throws -> [SearchResultViewModel] {
         
+        lastQuery = query
+        
+        try await Task.sleep(nanoseconds: 300_000_000) //delay for 0.3 seconds
+        if query != lastQuery {
+            return [] // skip the api callling if the query has changes
+        }
+        
+        print("🧿")
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { throw URLError(.badURL) }
         guard let accessToken = AuthManager.shared.accessToken else { throw URLError(.userAuthenticationRequired) }
-        guard let url = URL(string: "https://api.spotify.com/v1/search?q=raftaar&type=album%2Cplaylist&limit=5") else { throw URLError(.badURL) }
+        guard let url = URL(string: "https://api.spotify.com/v1/search?q=\(encodedQuery)&type=album%2Cartist%2Ctrack&limit=5") else { throw URLError(.badURL) }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
-        let (data,resp) = try await URLSession.shared.data(for: request)
-     //   print(String(data: data, encoding: .utf8))
+        let (data,_) = try await URLSession.shared.data(for: request)
+        //       print(String(data: data, encoding: .utf8))
         //  print("💎",resp)
         
         
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
         let response = try decoder.decode(SearchResponse.self, from: data)
-        print("💎",response)
-        return response
+        
+        var searchResult = [SearchResultViewModel]()
+        searchResult.append(contentsOf: response.tracks.items.compactMap({ .track(model: $0)}))
+        searchResult.append(contentsOf: response.albums.items.compactMap({ .album(model: $0)}))
+        searchResult.append(contentsOf: response.artists.items.compactMap({ .artist(model: $0)}))
+        
+        
+        //   print("💎",response)
+        print(searchResult)
+        return searchResult
     }
 }

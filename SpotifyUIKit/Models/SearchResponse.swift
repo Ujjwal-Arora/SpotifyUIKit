@@ -11,7 +11,6 @@ struct SearchResponse : Codable {
     let tracks: SearchTracksResponse
 }
 
-// MARK: - Albums
 struct SearchAlbumResponse : Codable {
     let items: [Album]
 }
@@ -46,7 +45,6 @@ struct SearchAlbumResponse : Codable {
 //    let uri: String
 //}
 
-// MARK: - Artists
 struct SearchArtistsResponse : Codable {
     let items: [Artist]
 }
@@ -71,7 +69,7 @@ struct SearchArtistsResponse : Codable {
 //    let total: Int
 //}
 //
-// MARK: - Tracks
+
 struct SearchTracksResponse : Codable {
     let items: [Track]
 }
