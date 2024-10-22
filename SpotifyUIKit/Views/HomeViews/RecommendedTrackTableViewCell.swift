@@ -9,6 +9,8 @@ import UIKit
 
 class RecommendedTrackTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    weak var delegate : RecommendedTrackTableViewCellDelegate?
+
     
     static let identifier = "RecommendedTrackTableViewCell"
     
@@ -20,7 +22,7 @@ class RecommendedTrackTableViewCell: UITableViewCell, UICollectionViewDelegate, 
         layout.itemSize = CGSize(width: 180, height: 70)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .cyan
+        collectionView.backgroundColor = .systemBackground
         collectionView.register(RecommendedTrackCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedTrackCollectionViewCell.identifier)
         
         return collectionView
@@ -62,8 +64,13 @@ class RecommendedTrackTableViewCell: UITableViewCell, UICollectionViewDelegate, 
         return cell
     }
     
-    
-    
-    
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        let selectedTrack = recommendedTracks[indexPath.row]
+        delegate?.didSelectTrack(selectedTrack: selectedTrack)
+    }
+}
+protocol RecommendedTrackTableViewCellDelegate : AnyObject {
+    func didSelectTrack(selectedTrack : Track)
 }

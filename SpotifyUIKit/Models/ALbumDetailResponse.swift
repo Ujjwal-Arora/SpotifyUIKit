@@ -9,7 +9,6 @@ import Foundation
 
 struct ALbumDetailResponse : Codable {
     let albumType: String
-//    let availableMarkets: [String]
     let externalUrls: APIExternalUrls
     let id: String
     let images: [APIImage]
@@ -19,19 +18,18 @@ struct ALbumDetailResponse : Codable {
 }
 
 struct TrackResponse1 : Codable{
-    let items: [Item1]
+    let items: [Track]
 }
 
 struct Item1: Codable {
-    let artists: [Artist]
-//    let availableMarkets: [String]
-    let discNumber: Int
-    let explicit: Bool
-    let externalUrls: APIExternalUrls
+    let artists: [ArtistModel]
+//    let discNumber: Int
+//    let explicit: Bool
+//    let externalUrls: APIExternalUrls
     let name: String
 }
-struct Artist : Codable {
-    let externalUrls: APIExternalUrls
-    let id: String
-    let name: String?
-}
+//struct Artist : Codable {
+//    let externalUrls: APIExternalUrls
+//    let id: String
+//    let name: String?
+//}

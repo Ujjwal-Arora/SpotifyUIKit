@@ -32,20 +32,20 @@ class RecommendedTrackCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
-  //      label.textColor = .secondaryLabel
+        label.textColor = .secondaryLabel
         return label
     }()
     
     public func configure(track : Track){
-        guard let urlString = track.album.images.first?.url else { return }
+        guard let urlString = track.album?.images.first?.url else { return }
         trackCoverImageView.sd_setImage(with: URL(string: urlString))
         
-        trackAlbumLabel.text = track.album.name
+        trackAlbumLabel.text = track.album?.name
         trackArtistLabel.text = track.artists.first?.name ?? "no artist"
     }
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .green
+        contentView.backgroundColor = .systemBackground
         contentView.addSubview(trackCoverImageView)
         contentView.addSubview(trackAlbumLabel)
         contentView.addSubview(trackArtistLabel)

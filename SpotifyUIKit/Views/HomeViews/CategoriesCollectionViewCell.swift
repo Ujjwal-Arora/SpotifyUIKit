@@ -11,9 +11,7 @@ import SDWebImage
 class CategoriesCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CategoriesCollectionViewCell"
-    
-    
-    //tilt the image like in spotify app
+        
     private let genreImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
@@ -32,6 +30,7 @@ class CategoriesCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = colors.randomElement()
         contentView.addSubview(genreImageView)
         contentView.addSubview(genreNameLabel)
+        contentView.layer.cornerRadius = 10
         
         
     }

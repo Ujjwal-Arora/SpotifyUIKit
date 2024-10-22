@@ -24,7 +24,7 @@ class NewReleasesTableViewCell: UITableViewCell, UICollectionViewDataSource, UIC
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .purple
+        collectionView.backgroundColor = .clear
         collectionView.register(NewReleasesCollectionViewCell.self, forCellWithReuseIdentifier: NewReleasesCollectionViewCell.identifier)
         return collectionView
     }()

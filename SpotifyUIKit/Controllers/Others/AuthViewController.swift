@@ -45,7 +45,6 @@ class AuthViewController: UIViewController, WKNavigationDelegate {
         let urlComponents = URLComponents(string: url.absoluteString)
         
         if let code = urlComponents?.queryItems?.first(where: { $0.name == "code" })?.value {
- //           print("❤️", code)
             webView.isHidden = true
             
             // Exchange the code for an access token using async/await

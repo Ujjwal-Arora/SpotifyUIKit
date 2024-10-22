@@ -21,13 +21,6 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-//    private let numberOfTracksLabel: UILabel = {
-//        let label = UILabel()
-//        label.font = .systemFont(ofSize: 15, weight: .medium)
-//        label.textColor = .secondaryLabel
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        return label
-//    }()
     
     private let artistNameLabel: UILabel = {
         let label = UILabel()
@@ -42,7 +35,6 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubview(albumCoverImageView)
         contentView.addSubview(albumNameLabel)
-  //      contentView.addSubview(numberOfTracksLabel)
         contentView.addSubview(artistNameLabel)
         
         applyConstraints()
@@ -71,22 +63,14 @@ class NewReleasesCollectionViewCell: UICollectionViewCell {
             artistNameLabel.topAnchor.constraint(equalTo: albumNameLabel.bottomAnchor, constant: 0),
             artistNameLabel.trailingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: -20)
         ]
-        
-//        let numberOfTracksLabelConstraints = [
-//      //      numberOfTracksLabel.leadingAnchor.constraint(equalTo: albumCoverImageView.le, constant: 10),
-//            numberOfTracksLabel.topAnchor.constraint(equalTo: albumNameLabel.bottomAnchor, constant: 0),
-//            numberOfTracksLabel.trailingAnchor.constraint(equalTo: albumCoverImageView.trailingAnchor, constant: 0)
-//        ]
-        
+
         NSLayoutConstraint.activate(albumCoverImageViewConstraints)
         NSLayoutConstraint.activate(albumNameLabelConstraints)
         NSLayoutConstraint.activate(artistNameLabelConstraints)
-      //  NSLayoutConstraint.activate(numberOfTracksLabelConstraints)
     }
     
     public func configure(viewModel: Album) {
         albumNameLabel.text = viewModel.name
-  //      numberOfTracksLabel.text = "Tracks: \(viewModel.totalTracks)"
         artistNameLabel.text = viewModel.artists.first?.name
         
         guard let urlString = viewModel.images.first?.url else { return }

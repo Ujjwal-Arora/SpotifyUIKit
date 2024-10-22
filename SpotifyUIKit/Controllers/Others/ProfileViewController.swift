@@ -10,7 +10,6 @@ import UIKit
 
 class ProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
    
-   // var profileModel : UserProfileModel?
     var models = [String]()
     
     private let tableView : UITableView = {

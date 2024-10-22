@@ -26,7 +26,7 @@ final class APICaller{
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             let result = try decoder.decode(UserProfileModel.self, from: data)
-            print("😍",result)
+//            print("😍",result)
             return result
         }catch{
             print("❤️",error.localizedDescription)
@@ -95,7 +95,7 @@ final class APICaller{
         
         let (data,resp) = try await URLSession.shared.data(for: request)
         //         print("🌸",String(data: data, encoding: .utf8))
-        print("🐥",resp)
+//        print("🐥",resp)
         
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -117,7 +117,7 @@ final class APICaller{
         
         let (data,resp) = try await URLSession.shared.data(for: request)
         //           print(String(data: data, encoding: .utf8))
-        print("🐬",resp)
+//        print("🐬",resp)
         
         
         let decoder = JSONDecoder()
@@ -142,7 +142,7 @@ final class APICaller{
         request.httpMethod = "GET"
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
-        let (data,resp) = try await URLSession.shared.data(for: request)
+        let (data,_) = try await URLSession.shared.data(for: request)
         //               print(String(data: data, encoding: .utf8))
         //        print("🎲",resp)
         
@@ -213,7 +213,7 @@ final class APICaller{
         request.httpMethod = "GET"
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         
-        let (data,resp) = try await URLSession.shared.data(for: request)
+        let (data,_) = try await URLSession.shared.data(for: request)
         //  print(String(data: data, encoding: .utf8))
         //  print("🏓",resp)
         
@@ -237,7 +237,7 @@ final class APICaller{
             return [] // skip the api callling if the query has changes
         }
         
-        print("🧿")
+//        print("🧿")
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { throw URLError(.badURL) }
         guard let accessToken = AuthManager.shared.accessToken else { throw URLError(.userAuthenticationRequired) }
         guard let url = URL(string: "https://api.spotify.com/v1/search?q=\(encodedQuery)&type=album%2Cartist%2Ctrack&limit=5") else { throw URLError(.badURL) }
@@ -259,7 +259,7 @@ final class APICaller{
         var searchResult = [SearchResultViewModel]()
         searchResult.append(contentsOf: response.tracks.items.compactMap({ .track(model: $0)}))
         searchResult.append(contentsOf: response.albums.items.compactMap({ .album(model: $0)}))
-        searchResult.append(contentsOf: response.artists.items.compactMap({ .artist(model: $0)}))
+     //   searchResult.append(contentsOf: response.artists.items.compactMap({ .artist(model: $0)}))
         
         
         //   print("💎",response)

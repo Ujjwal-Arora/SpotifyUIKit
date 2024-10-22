@@ -10,6 +10,6 @@ import Foundation
 
 struct ArtistModel  : Codable {
     let externalUrls: APIExternalUrls
-    let id, name, type: String
+    let id, name: String
 }
 

@@ -107,4 +107,8 @@ final class PlayerControlsView : UIView {
         forwardBUtton.frame = CGRect(x: playPauseBUtton.right + 80, y: playPauseBUtton.top, width: buttonSize, height: buttonSize)
 
     }
+    func configure(viewModel : PLayerControlsViewViewModel){
+        nameLabel.text = viewModel.title
+        subtitleLabel.text = viewModel.subtitle
+    }
 }

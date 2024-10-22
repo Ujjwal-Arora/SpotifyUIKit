@@ -46,7 +46,7 @@ class FeaturedPlaylistCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(playlistNameLabel)
         contentView.addSubview(playlistDescriptionLabel)
 
-        contentView.backgroundColor = .brown
+        contentView.backgroundColor = .systemBackground
   
     }
     override func layoutSubviews() {

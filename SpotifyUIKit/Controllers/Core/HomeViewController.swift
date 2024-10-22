@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewReleasesTableViewCellDelegate, FeaturedPlaylistTableViewCellDelegate {
+class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, NewReleasesTableViewCellDelegate, FeaturedPlaylistTableViewCellDelegate, RecommendedTrackTableViewCellDelegate {
     
     
     var newReleases = [Album]()
@@ -19,7 +19,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     private var homeViewTable : UITableView = {
         var table = UITableView(frame: .zero, style: .grouped)
-        table.backgroundColor = .orange
+        table.backgroundColor = .systemBackground
         
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         table.register(NewReleasesTableViewCell.self, forCellReuseIdentifier: NewReleasesTableViewCell.identifier)
@@ -48,14 +48,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         homeViewTable.frame = view.bounds
     }
     
-    //makethis func for recommendedSection
     func didSelectAlbum(albumId: String) {
         Task{
-//            let albumDetails = try await APICaller.shared.getAlbum(albumId: albumId)
-//            let vc = AlbumDetailsViewController(album: albumDetails)
-//            vc.title = albumDetails.name
-//            navigationController?.pushViewController(vc, animated: true)
-//            
             let albumDetails = try await APICaller.shared.getAlbum(albumId: albumId)
             let vc = DetailsViewController()
             vc.album = albumDetails
@@ -66,11 +60,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     func didSelectPlaylist(selectedPlaylistId: String) {
         Task{
-//            let playlistDetails = try await APICaller.shared.getPlaylist(playlistId: selectedPlaylistId)
-//            let vc = PlaylistDetailViewController(playlist: playlistDetails)
-//            vc.title = playlistDetails.name
-//            navigationController?.pushViewController(vc, animated: true)
-            
             let playlistDetails = try await APICaller.shared.getPlaylist(playlistId: selectedPlaylistId)
             let vc = DetailsViewController()
             vc.playlist = playlistDetails
@@ -78,6 +67,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             navigationController?.pushViewController(vc, animated: true)
         }
     }
+    func didSelectTrack(selectedTrack: Track) {
+        PlaybackPresenter.shared.startPlayback(viewcontroller: self, track: selectedTrack)
+    }
+    
+    
     
     @objc func didTapSettings(){
         let vc = SettingsViewController()
@@ -93,29 +87,31 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         switch indexPath.section {
         case 0 :
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewReleasesTableViewCell.identifier, for: indexPath) as? NewReleasesTableViewCell else { return UITableViewCell() }
-            cell.backgroundColor = .purple
+            cell.backgroundColor = .clear
             
             cell.delegate = self
             
             cell.configure(viewModel: newReleases)
             return cell
-        case 2 :
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendedTrackTableViewCell.identifier, for: indexPath) as? RecommendedTrackTableViewCell else { return UITableViewCell() }
-            cell.backgroundColor = .purple
-            
-            cell.configure(viewModel: recommendedTracks)
-            return cell
         case 1 :
             guard let cell = tableView.dequeueReusableCell(withIdentifier: FeaturedPlaylistTableViewCell.identifier, for: indexPath) as? FeaturedPlaylistTableViewCell else { return UITableViewCell() }
-            cell.backgroundColor = .blue
+            cell.backgroundColor = .clear
             
             cell.delegate = self
 
             cell.configure(playlists: featuredPlaylists)
             return cell
+        case 2 :
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: RecommendedTrackTableViewCell.identifier, for: indexPath) as? RecommendedTrackTableViewCell else { return UITableViewCell() }
+            cell.backgroundColor = .clear
+            
+            cell.delegate = self
+            cell.configure(viewModel: recommendedTracks)
+            return cell
+        
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.backgroundColor = .systemPink
+            cell.backgroundColor = .clear
             return cell
         }
     }
@@ -129,19 +125,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     func fetchData(){
         Task{
-//            async let newReleasesResponse =  APICaller.shared.getNewReleases()
-//            async let featuredPlaylistResponse = APICaller.shared.getFeaturesPlaylist()
-//            async let RecommendationsResponse = APICaller.shared.getRecommendations()
-//            try await print("🐷",RecommendationsResponse)
-//            
-//            self.newReleases = try await  newReleasesResponse.albums.items
-//                       print("🚫", self.newReleases)
-//
-//            self.featuredPlaylists = try await featuredPlaylistResponse.playlists.items
-//                       print("🚫", self.featuredPlaylists)
-//            
-//           self.recommendedTracks = try await RecommendationsResponse.tracks
-//                      print("🎧", self.recommendedTracks)
+            async let newReleasesResponse =  APICaller.shared.getNewReleases()
+            async let featuredPlaylistResponse = APICaller.shared.getFeaturesPlaylist()
+            async let RecommendationsResponse = APICaller.shared.getRecommendations()
+            
+            self.newReleases = try await  newReleasesResponse.albums.items
+
+            self.featuredPlaylists = try await featuredPlaylistResponse.playlists.items
+            
+           self.recommendedTracks = try await RecommendationsResponse.tracks
             
             DispatchQueue.main.async {
                 self.homeViewTable.reloadData()

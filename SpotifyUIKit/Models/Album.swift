@@ -10,8 +10,6 @@ import Foundation
 struct Album  : Codable {
     let albumType: String
     let totalTracks: Int
- //   let availableMarkets: [String]
- //   let externalUrls: APIExternalUrls
     let id: String
     let images: [APIImage]
     let name, releaseDate: String

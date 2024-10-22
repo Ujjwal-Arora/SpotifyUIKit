@@ -38,7 +38,7 @@ class FeaturedPlaylistTableViewCell: UITableViewCell, UICollectionViewDelegate, 
         contentView.addSubview(featuredPlaylistCollectionView)
         
         featuredPlaylistCollectionView.frame = contentView.bounds
-        featuredPlaylistCollectionView.backgroundColor = .red
+        featuredPlaylistCollectionView.backgroundColor = .systemBackground
         
         
         featuredPlaylistCollectionView.delegate = self

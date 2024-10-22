@@ -22,7 +22,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UICollect
         let vc = UISearchController(searchResultsController: SearchResultViewController())
         vc.searchBar.placeholder = "Search songs, artists, albums"
         vc.searchBar.searchBarStyle = .minimal
-        vc.definesPresentationContext = true //??
+   //     vc.definesPresentationContext = true //??
         return vc
     }()
     private let searchVCCollectionView : UICollectionView = {
@@ -31,7 +31,7 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UICollect
         layout.scrollDirection = .vertical
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemPink
+        collectionView.backgroundColor = .systemBackground
         collectionView.register(CategoriesCollectionViewCell.self, forCellWithReuseIdentifier: CategoriesCollectionViewCell.identifier)
         
         return collectionView
@@ -62,7 +62,6 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UICollect
     }
     func updateSearchResults(for searchController: UISearchController) {
         guard let resultsController = searchController.searchResultsController as? SearchResultViewController, let query = searchController.searchBar.text, !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
-       print(query)
         
         resultsController.delegate = self
         
@@ -82,26 +81,5 @@ class SearchViewController: UIViewController, UISearchResultsUpdating, UICollect
         return cell
                 
     }
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        
-//        collectionView.deselectItem(at: indexPath, animated: true)
-//        
-//        let selectedCategory = categories[indexPath.row]
-//        
-//        Task{
-//            let details = try await APICaller.shared.getCategoryPlaylist(playlistId: selectedCategory.id)
-//            
-//            DispatchQueue.main.async {
-//                let vc = CategoryViewController(categories: details)
-//                vc.title = selectedCategory.name
-//                vc.view.backgroundColor = .blue
-//                self.navigationController?.pushViewController(vc, animated: true)
-//
-//            }
-//            
-//        }
-//        
-//        
-//    }
     
 }

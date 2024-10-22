@@ -8,34 +8,19 @@
 import UIKit
 
 
-//this is album/playllist/recommended detailVC
+//this is album/playllist detailVC
 
-//make a header video part 12
-//remove image if not present
 class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     public var playlist : PlaylistDetailsResponse?
     
-    public var genreplaylist : Playlist?
-
     public var album : ALbumDetailResponse?
     
-    
-    
-
     private let detailsTableView : UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.register(DetailsTableViewCell.self, forCellReuseIdentifier: DetailsTableViewCell.identifier)
         return table
     }()
-//    
-//    init(playlist: PlaylistDetailsResponse) {
-//        self.playlist = playlist
-//        super.init(nibName: nil, bundle: nil)
-//    }
-//    required init?(coder: NSCoder) {
-//        fatalError()
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +31,7 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
         detailsTableView.dataSource = self
     }
     override func viewDidLayoutSubviews() {
-        detailsTableView.backgroundColor = .systemPink
+        detailsTableView.backgroundColor = .systemBackground
         detailsTableView.frame = view.bounds
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -55,13 +40,7 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             return selectecAlbum.tracks.items.count
         }else if let selectedPlaylist = playlist{
             return selectedPlaylist.tracks.items.count
-        }
-//        else if let selectedGenrePlaylist = genreplaylist{
-//            return selectedGenrePlaylist.
-//        }
-        
-        
-        else{
+        }else{
             return 1
         }
     }
@@ -78,13 +57,24 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             let track = selectedPLaylist.tracks.items[indexPath.row].track
             cell.configurePlaylist(Playlist: track)
         }
-        
-        //        cell.configure(audioTrack: playlist.tracks.items[indexPath.row].track)
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        100
+        80
     }
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        var selectedTrack : Track?
+        
+        if let selectedAlbum = album {
+            selectedTrack = selectedAlbum.tracks.items[indexPath.row]
+        } else if let selectedPlaylist = playlist {
+            selectedTrack = selectedPlaylist.tracks.items[indexPath.row].track
+        }
+        guard let track = selectedTrack else { return }
+        
+        PlaybackPresenter.shared.startPlayback(viewcontroller: self, track: track)
+    }
     
 }

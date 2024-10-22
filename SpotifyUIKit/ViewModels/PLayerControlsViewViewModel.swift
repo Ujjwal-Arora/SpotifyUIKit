@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct PLayerControlsViewViewModel{
+    let title : String
+    let subtitle : String
+}

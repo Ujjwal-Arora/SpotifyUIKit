@@ -14,7 +14,7 @@ class DetailsTableViewCell: UITableViewCell {
     
 
     let trackImageView : UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "swift"))
+        let imageView = UIImageView(image: UIImage(named: "logo"))
         imageView.contentMode = .scaleToFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,51 +46,40 @@ class DetailsTableViewCell: UITableViewCell {
     }
     override func layoutSubviews() {
         
-        trackImageView.backgroundColor = .cyan
-        trackNameLabel.backgroundColor = .yellow
-        artistNameLabel.backgroundColor = .orange
+        trackImageView.backgroundColor = .clear
+        trackNameLabel.backgroundColor = .clear
+        artistNameLabel.backgroundColor = .clear
 
         
     }
-    public func configureAudioTrack(audioTrack : Item1){
+    public func configureAudioTrack(audioTrack : Track){
         
         trackNameLabel.text = audioTrack.name
-        
-        
-        
-//        guard let urlString = audioTrack.album.images.first?.url else { return }
-//        trackImageView.sd_setImage(with: URL(string: urlString))
-
         let artistNames = audioTrack.artists.compactMap{$0.name}.joined(separator: ", ")
         artistNameLabel.text = artistNames
+        
+//        print("🔦",audioTrack.album?.images)
+//        guard let urlString = audioTrack.album?.images.first?.url else { return }
+//        trackImageView.sd_setImage(with: URL(string: urlString))
+
+        trackImageView.isHidden = true
     }
     public func configurePlaylist(Playlist : Track){
         trackNameLabel.text = Playlist.name
-        
-        
-        
-        guard let urlString = Playlist.album.images.first?.url else { return }
+        guard let urlString = Playlist.album?.images.first?.url else { return }
         trackImageView.sd_setImage(with: URL(string: urlString))
 
         
         let artistNames = Playlist.artists.map{$0.name}.joined(separator: ", ")
         artistNameLabel.text = artistNames
     }
-    public func configureRecommendation(Playlist : Track){
-        
-    }
     
-    //remove above
     public func configureDetails(details : DetailsViewModel){
         trackNameLabel.text = details.title
         
         
-        
- //       guard let urlString = Playlist.album.images.first?.url else { return }
         trackImageView.sd_setImage(with: URL(string: details.coverImageUrlString))
-
         
-   //     let artistNames = Playlist.artists.map{$0.name}.joined(separator: ", ")
         artistNameLabel.text = details.artists
     }
     

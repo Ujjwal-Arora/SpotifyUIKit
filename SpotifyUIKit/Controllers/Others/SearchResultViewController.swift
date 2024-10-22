@@ -20,21 +20,19 @@ protocol SearchResultViewControllerDelegate : AnyObject {
 class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     weak var delegate : SearchResultViewControllerDelegate?
-
- //   private var searchResults = [SearchResultViewModel]()
    
     var sections = [SearchResultSection]()
     
     private let tableView : UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.backgroundColor = .brown
+        tableView.backgroundColor = .clear
         return tableView
     }()
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .red
+        view.backgroundColor = .systemBackground
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -46,14 +44,7 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         tableView.frame = view.bounds
     }
     func update(searchResults : [SearchResultViewModel]){
-        let artists = searchResults.filter({
-            switch $0 {
-            case .artist:
-                return true
-            default:
-                return false
-            }
-        })
+        
         let tracks = searchResults.filter({
             switch $0 {
             case .track:
@@ -70,7 +61,16 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
                 return false
             }
         })
-        self.sections = [SearchResultSection(title: "Songs", results: tracks),SearchResultSection(title: "Albums", results: albums),SearchResultSection(title: "Artists", results: artists),]
+        self.sections = [
+            SearchResultSection(
+                title: "Songs",
+                results: tracks
+            ),
+            SearchResultSection(
+                title: "Albums",
+                results: albums
+            )
+        ]
         
         tableView.reloadData()
         tableView.isHidden = searchResults.isEmpty
@@ -87,11 +87,9 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
         let result = sections[indexPath.section].results[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .purple
+        cell.backgroundColor = .clear
         
         switch result {
-        case .artist(let model) :
-            cell.textLabel?.text = model.name
         case .album(let model) :
             cell.textLabel?.text = model.name
             
@@ -105,17 +103,26 @@ class SearchResultViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return  sections[section].title
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        let vc = DetailsViewController()
-        
-     //   vc.album = sections[indexPath.section].results[indexPath.row]
-        
-        //  vc.title = "hello"
-        vc.view.backgroundColor = .systemPink
-        navigationController?.pushViewController(vc, animated: true)
 
-        delegate?.didTapRow(controller: vc)
+        let result = sections[indexPath.section].results[indexPath.row]
+        
+        switch result {
+        case .track(let model):
+            PlaybackPresenter.shared.startPlayback(viewcontroller: self, track: model)
+        case .album(let model):
+            let vc = DetailsViewController()
+            Task{
+                let albumResponse = try await APICaller.shared.getAlbum(albumId: model.id)
+                
+                vc.album = albumResponse
+                vc.view.backgroundColor = .systemBackground
+                navigationController?.pushViewController(vc, animated: true)
+                
+                delegate?.didTapRow(controller: vc)
+            }
+        }
     }
 }

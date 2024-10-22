@@ -73,16 +73,4 @@ class WelcomeViewController: UIViewController {
         let vc = AuthViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
-//    private func handleSignIn(success : Bool){
-//        if success{
-//            let mainTabBarVC = TabBarViewController()
-//            mainTabBarVC.modalPresentationStyle = .fullScreen
-//            present(mainTabBarVC, animated: true)
-//        }else{
-//            let alert = UIAlertController(title: "Error Sign In", message: "sorry", preferredStyle: .alert)
-//            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel))
-//            present(alert, animated: true)
-//            
-//        }
-//    }
 }
